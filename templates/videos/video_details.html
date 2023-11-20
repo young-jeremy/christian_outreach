@@ -1,0 +1,579 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% load social_share %}
+
+
+<style>
+        /* CSS for the two-column layout */
+        .video-details-container {
+            display: flex;
+        }
+
+        .video-details {
+            flex: 1;
+        }
+
+        .related-videos {
+            flex: 1;
+            padding: 20px;
+            border-left: 1px solid #ccc; /* Add a vertical divider */
+        }
+
+        .related-videos h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .related-videos ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .related-videos li {
+            margin-bottom: 10px;
+        }
+
+        .related-videos img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Add additional CSS styles as needed */
+
+        /* styles.css */
+        .video-details-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .video-details {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .related-videos {
+            flex: 1;
+            padding: 20px;
+            background-color: #f2f2f2; /* Background color for the related videos section */
+        }
+
+        .related-videos h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .related-videos ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .related-videos li {
+            margin-bottom: 10px;
+        }
+
+        .related-videos img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    </style>
+
+<!-- templates/base.html or templates/video_detail.html -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+
+{% block content %}
+<div class="row">
+        <div class="col-sm-6 col-lg-8">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/DZOIVbAhAvU?si=KB_6ETOfPwXIuox3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div>
+                  <video controls width="640" height="360" autoplay poster="video_icon.jpg">
+                    <source src="{{ MEDIA_URL }}{{ video.path }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                  <h3>{{ video.title }}</h3>
+                  <div class="video-controls">
+                        <button id="whatsapp-share-button" class="btn btn-warning btn-rounded">Share on WhatsApp</button>
+                        <button id="email-share-button" class="btn btn-success btn-rounded">Share via Email</button>
+                        <button id="copy-link-button" class="btn btn-secondary btn-rounded">Copy Link</button>
+                        <button id="add-to-favorites-btn">Add to Favorites</button>
+                        <button id="add-to-favorites" class="btn btn-warning btn-rounded">Add to Favorites</button>
+                        <a href="{% url 'videos:like_video' video.id %}"><img src="{% static 'icons/thumbs_up.png' %}" style="width:25;length:25;">{{ video.likes.count }}</a>
+                        <a href="{% url 'videos:like_video' video.id %}"><img src="{% static 'icons/thumbs_down.png' %}" style="width:25;length:25;">{{ video.dislikes.count }} dislikes</a>
+                      <span>
+                          <form action="{% url 'videos:video_details' video.id %}">
+                                {% if msg %}
+                                    <button id="like-button" data-video-id="{{ video.id }}" class="btn btn-success btn-rounded">
+                                        <img src="{% static 'icons/thumbs_up.png' %}" style="width:25;length:25;">
+                                        {{ video.likes.count }}
+                                    </button>
+                                {% else %}
+                                    <button id="dislike-button" data-video-id="{{ video.id }}" class="btn btn-success btn-rounded">
+                                        <img src="{% static 'icons/thumbs_down.png' %}" style="width:25;length:25;">
+                                    {{ video.dislikes.count }} dislikes
+                                    </button>
+                                {% endif %}
+                          </form>
+                      </span>
+
+
+                                {% post_to_facebook object_or_url "Post to Facebook" %}
+
+                                {% post_to_gplus  object_or_url "Post to Google+!" %}
+
+                                {% post_to_twitter "New Song : {{ video.title }}. check it out"  object_or_url "Post to Twitter" %}
+
+                                {% post_to_linkedin object_or_url %}
+
+                                {% send_email video.title "New Song: {{video.title}}. Check it out!" object_or_url "Share via email" %}
+
+                                {% post_to_reddit "New Song: {{object.title}}" object_or_url %}
+                                {% post_to_telegram "New Song: {{object.title}}" object_or_url %}
+                                {% post_to_whatsapp object_or_url "Share via WhatsApp" %}
+                                {% save_to_pinterest object_or_url %}
+                                {% add_pinterest_script %}
+                                {% copy_to_clipboard object_or_url "Copy to clipboard!" %}
+                                {% add_copy_script %}
+                  </div>
+                <div class="video">
+                    <div class="owner-info">
+                        <a href="{% url 'users:account_settings' %}"><img src="{{ user.profile.avatar.url }}" style="width:100; length:50; border-radius: 50px;" alt="{{ user.username }} picture">
+                            <span>{{ user.profile.username }}
+                            </span>
+                        </a>
+                        <span>
+                            <div class="dropdown">
+                              <button onclick="addsub()"  class="btn btn-secondary dropdown-toggle btn btn-success btn-rounded" type="button" id="dropdownMenuButton sub-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                subscribe
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/all_notifications.png' %}" style="width:25;length:25;">all notifications</a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/custom_notifications.png' %}" style="width:25;length:25;">custom notifications</a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/message.png' %}" style="width:25;length:25;"><button onclick="subscribe('comment')">Subscribe to Comments</button></a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/chat.png' %}" style="width:25;length:25;">comments replies</a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/like_notifications.png' %}" style="width:25;length:25;"><button onclick="subscribe('like')">Subscribe to Likes</button></a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/dislike_notifications.png' %}" style="width:25;length:25;">dislike notifications</a>
+                                <a class="dropdown-item" href="#"><img src="{% static 'icons/upload_notifications.png' %}" style="width:25;length:25;"><button onclick="subscribe('upload')">Subscribe to Uploads</button></a>
+                              </div>
+                            </div>
+                            <span><p id="count">Subscribers: {{ subscription_count }}</p></span>
+                        </span>
+                    </div>
+                </div>
+                    <p><span> {{ video.views.count }} Views {{ video.recording_date_and_location }} </span></p>
+
+
+
+                    <p></p>
+                        <p>{{ video.description }}</p>
+                      <form method="post" action="{% url 'videos:post_comment' video.id %}" id="comment-form" >
+                        {% csrf_token %}
+                        <textarea name="text" placeholder="Add a comment" required></textarea>
+                        <button type="submit" class="btn btn-success btn-rounded">Post Comment</button>
+                      </form>
+
+                    <h2>{{ comments.count }} {% if comments.count == 1 %}Comment{% else %}Comments{% endif %}</h2>
+                            <div class="ui comments">
+                                          <h3 class="ui dividing header">Comments</h3>
+                                          <div class="comment">
+                                            <a class="avatar">
+                                              <img src="{{ user.profile.avatar.url }}" style="width:20; length:20; border-radius: 20px;" alt="{{ user.username }} picture">
+                                            </a>
+                                            <div class="content">
+                                              <a class="author">{{ request.user.username }}</a>
+                                              <div class="metadata">
+                                                <span class="date">{{ comment.created_at }}</span>
+                                              </div>
+                                              <div class="text">
+                                                {{ comment.text }}
+                                              </div>
+                                              <div class="actions">
+                                                <a class="reply" href="{% url 'videos:reply_comment' %}">Reply</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <form class="ui reply form" >
+                                            <div class="field">
+                                              <textarea></textarea>
+                                            </div>
+                                            <div class="ui blue labeled submit icon button">
+                                              <i class="icon edit"></i> Add Reply
+                                            </div>
+                                          </form>
+                            </div>
+
+                          {% for comment in video.comments.all %}
+                          <div class="comment">
+                              <a href="{% url 'users:account_settings' %}"><img src="{{ user.profile.avatar.url }}" style="width:20; length:20; border-radius: 20px;" alt="{{ user.username }} picture"><span>@{{ user.profile.username }}</span></a>
+                              <p>{{ comment.comment }}</p>
+                                  {% if user.is_authenticated and user == comment.user %}
+                                      <form action="{% url 'comments:edit_comment' comment.id %}" method="post" class="edit-form">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="text" value="{{ comment.comment }}">
+
+                                            <button class="edit-comment btn-rounded" data-comment-id="{{ comment.id }}" onclick="return confirm('Are you sure you want to edit this comment?')" >Edit</button>
+                                      </form>
+                                      <form action="{% url 'comments:delete_comment' comment.id %}" method="post" class="delete-form">
+                                          {% csrf_token %}
+                                        <button class="delete-comment btn-rounded" data-comment-id="{{ comment.id }}" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                                      </form>
+
+                                  {% endif %}
+                          </div>
+                          {% endfor %}
+            </div>
+            <div class="col-md-6">
+                    <h1>Related Videos</h1>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/DZOIVbAhAvU?si=KB_6ETOfPwXIuox3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+                    {% for video in related_videos %}
+
+
+                        <div class="card mb-3 related-videos" style="max-width: 540px; align-right">
+                          <div class="row g-0">
+
+                                <div class="col-md-4">
+                                  <a href="{% url 'videos:video_details' video.id %}">
+                                        <img
+                                        src="{{ video.thumbnail.url }}" style="length:100;width:100;"
+                                        alt="{{ user.username }}"
+                                        style="length:100;width:100;"
+                                        class="img-fluid rounded-start"
+                                      />
+                                  </a>
+                                </div>
+                                <div class="col-md-8">
+                                  <div class="card-body">
+                                      <a href="{% url 'videos:video_details' video.id %}"><h5 class="card-title">{{ video.title }}</h5>
+                                        <p class="card-text">
+                                          {{ user.username }}
+                                        </p>
+                                      </a>
+                                    <p class="card-text">
+                                      <small class="text-muted">{{ video.views }} views {{ video.recording_date_and_location|timesince  }}</small>
+                                    </p>
+                                  </div>
+                                </div>
+
+                          </div>
+                    {% endfor %}
+            </div>
+        </div>
+</div>
+
+
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const videoId = {{ video.id }};  // Replace with the actual video ID
+    const shareUrl = window.location.href;  // Get the current page URL
+
+    // Function to open WhatsApp share dialog
+    const shareOnWhatsApp = () => {
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareUrl)}`;
+        window.open(whatsappUrl, '_blank');
+    };
+
+    // Function to open email share dialog
+    const shareViaEmail = () => {
+        const emailSubject = 'Check out this video!';
+        const emailBody = `I thought you might like this video: ${shareUrl}`;
+        const emailLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = emailLink;
+    };
+
+    // Function to copy the link to the clipboard
+    const copyLinkToClipboard = () => {
+        const textField = document.createElement('textarea');
+        textField.value = shareUrl;
+        document.body.appendChild(textField);
+        textField.select();
+        document.execCommand('copy');
+        document.body.removeChild(textField);
+        alert('Link copied to clipboard');
+    };
+
+    // Attach click event handlers to share buttons
+    const whatsappButton = document.getElementById('whatsapp-share-button');
+    whatsappButton.addEventListener('click', shareOnWhatsApp);
+
+    const emailButton = document.getElementById('email-share-button');
+    emailButton.addEventListener('click', shareViaEmail);
+
+    const copyButton = document.getElementById('copy-link-button');
+    copyButton.addEventListener('click', copyLinkToClipboard);
+});
+
+// Edit comment
+$('.edit-comment').click(function () {
+    const comment = $(this).prev('p');
+    const editedComment = $('<input type="text" class="edited-comment" value="' + comment.text() + '">');
+    comment.replaceWith(editedComment);
+});
+
+// Save edited comment
+$(document).on('blur', '.edited-comment', function () {
+    const editedComment = $(this).val();
+    const comment = $('<p>' + editedComment + '</p>');
+    $(this).replaceWith(comment);
+});
+
+// Delete comment
+$('.delete-comment').click(function () {
+    const commentId = $(this).data('comment-id');
+    if (confirm('Are you sure you want to delete this comment?')) {
+        // Send an AJAX request to delete the comment
+        $.ajax({
+            url: '/delete-comment/' + commentId + '/',
+            type: 'POST',
+            success: function () {
+                // Remove the comment from the DOM
+                $(this).closest('.comment').remove();
+            }
+        });
+    }
+});
+
+var video = document.getElementById('video-player');
+        var startTime;
+        var endTime;
+
+        // Listen for the 'play' event to capture the start time
+        video.addEventListener('play', function() {
+            startTime = new Date();
+        });
+
+        // Listen for the 'pause' event to capture the end time
+        video.addEventListener('pause', function() {
+            endTime = new Date();
+
+            // Calculate the duration watched in seconds
+            var durationWatched = (endTime - startTime) / 1000;
+
+            // Send an AJAX request to update_video_views view
+            if (durationWatched >= 30) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/update_video_views/{{ video.id }}/', true);
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText); // You can handle the response as needed
+                    }
+                };
+
+                // Send start and end times as data
+                var data = new FormData();
+                data.append('start_time', startTime.toISOString());
+                data.append('end_time', endTime.toISOString());
+
+                xhr.send(data);
+            }
+        });
+
+
+
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_ANALYTICS_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            window.dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'YOUR_ANALYTICS_ID');
+    </script>
+<script>
+    document.querySelectorAll('#like-btn, #dislike-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const action = this.getAttribute('data-action');
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: new URLSearchParams({ action }),
+            }).then(response => {
+                if (response.ok) {
+                    // Handle success, e.g., update like/dislike counts on the page
+                    // You can use JavaScript to update the UI without a full page refresh
+                }
+            });
+        });
+    });
+</script>
+<script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+        // JavaScript to handle adding to favorites
+        document.addEventListener("DOMContentLoaded", function() {
+            const addToFavoritesButton = document.getElementById("add-to-favorites");
+            addToFavoritesButton.addEventListener("click", addToFavorites);
+
+            function addToFavorites() {
+                const videoId = "{{ video.id }}"; // Replace with actual video ID
+                fetch("/add_to_favorites/", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken") // Get the CSRF token
+                    },
+                    body: JSON.stringify({ video_id: videoId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addToFavoritesButton.disabled = true;
+                        addToFavoritesButton.innerText = "Added to Favorites";
+                    }
+                });
+            }
+
+            // Function to get the CSRF token from cookies
+            function getCookie(name) {
+                var value = "; " + document.cookie;
+                var parts = value.split("; " + name + "=");
+                if (parts.length == 2) return parts.pop().split(";").shift();
+            }
+        });
+    </script>
+
+    <script>
+        // JavaScript to handle subscribing/unsubscribing
+        document.addEventListener("DOMContentLoaded", function() {
+            const subscribeButton = document.getElementById("subscribe-button");
+            const subscriptionCount = document.getElementById("subscription-count");
+            const channelId = subscribeButton.getAttribute("data-channel-id");
+            let subscribed = {{ subscribed|yesno:"true,false" }};
+
+            subscribeButton.addEventListener("click", () => {
+                // Send a request to subscribe/unsubscribe from the channel
+                fetch("/toggle_subscription/", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken")
+                    },
+                    body: JSON.stringify({ channel_id: channelId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        subscribed = !subscribed;
+                        subscribeButton.textContent = subscribed ? "Unsubscribe" : "Subscribe";
+                        subscriptionCount.textContent = "Subscribers: " + data.subscription_count;
+                    }
+                });
+            });
+
+            // Function to get the CSRF token from cookies
+            function getCookie(name) {
+                var value = "; " + document.cookie;
+                var parts = value.split("; " + name + "=");
+                if (parts.length == 2) return parts.pop().split(";").shift();
+            }
+        });
+   </script>
+<script>
+  window.watsonAssistantChatOptions = {
+    integrationID: "6a8fed36-58d4-43e3-a153-0c5c2ceda6c8", // The ID of this integration.
+    region: "au-syd", // The region your integration is hosted in.
+    serviceInstanceID: "bf7ad12b-4289-46d2-baba-e83ff9aa0a59", // The ID of your service instance.
+    onLoad: function(instance) { instance.render(); }
+  };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+
+<script>
+var subcounter = document.getElementById('count')
+sub_button = document.getElementById('sub_btn')
+subscriber_added = []
+
+function addsub(){
+	sub_button.classList.add('loading')
+	axios
+	.get('/add-sub/1/')
+	.then(response =>{
+			this.response = response.data;
+			sub_button.innerHTML =  this.response;
+			loadsub()
+			sub_button.classList.remove('loading')
+	})
+}
+
+function loadsub(){
+	axios
+	.get('/sub-load/1/')
+	.then(response =>{
+			this.response = response.data;
+			subscriber_added = this.response
+			subcounter.innerHTML = subscriber_added.length
+
+	})
+}
+
+window.onload = loadsub;
+</script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        function subscribe(activity) {
+            var username = prompt('Enter your username:');
+            socket.emit('subscribe', {'username': username, 'activity': activity});
+        }
+
+        socket.on('subscription_response', function(data) {
+            alert(data.message);
+        });
+
+        socket.on('notification', function(data) {
+            var notifications = document.getElementById('notifications');
+            notifications.innerHTML += '<p>' + data.message + '</p>';
+        });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const addToFavoritesBtn = document.getElementById('add-to-favorites-btn');
+
+      if (addToFavoritesBtn) {
+        addToFavoritesBtn.addEventListener('click', function () {
+          addToFavorites();
+        });
+      }
+
+      function addToFavorites() {
+        const videoId = {{ video.id }};
+        const csrfToken = "{{ csrf_token }}";
+
+        fetch(`/add_to_favorites/${videoId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to add to favorites');
+            }
+            // You can update the UI or provide feedback to the user
+            console.log('Added to Favorites successfully');
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    });
+  </script>
+</div>
+
+{% endblock %}

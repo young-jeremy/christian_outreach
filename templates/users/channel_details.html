@@ -1,0 +1,38 @@
+<!-- account/account_settings.html -->
+
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+  <h1>Account Settings</h1>
+
+  <h2>About {{ user.username }}</h2>
+  <p>Email: {{ user.email }}</p>
+  <p>Bio: {{ user.bio }}</p>
+  <p>Phone Number: {{ user.phone_number }}</p>
+  <p>Date joined: {{ user.date_joined }}</p>
+  <p>First Name: {{ user.first_name }}</p>
+  <p>Last Name: {{ user.last_name }}</p>
+  <p>Church Affiliations: {{ user.church_affiliations }}</p>
+
+
+  <h2>Videos Uploaded</h2>
+  <ul>
+    {% for video in videos_uploaded %}
+      <li><a href="{% url 'videos:video_details' video.id %}">{{ video.title }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <h2>Subscriptions</h2>
+  <ul>
+    {% for subscription in subscriptions %}
+      <li><a href="{% url 'users:channel_details' subscription.id %}">{{ subscription.name }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <h2>Channels Subscribed</h2>
+  <ul>
+    {% for channel in channels_subscribed %}
+      <li><a href="{% url 'videos:channel_details' channel.id %}">{{ channel.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

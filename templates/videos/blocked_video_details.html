@@ -1,0 +1,27 @@
+{% extends 'base_dashboard.html' %}
+
+<head>
+    <title>Blocked Video Details</title>
+</head>
+<body>
+{% block content %}
+    <h1>Blocked Video Details</h1>
+    <h2>{{ video.title }}</h2>
+
+    <!-- Display a message about why the video was blocked -->
+    <div>
+        <p>This video has been blocked due to the following reasons:</p>
+        <ul>
+            <li>Violation of content guidelines.</li>
+            <li>Copyright infringement.</li>
+            <li>Inappropriate or offensive content.</li>
+            <!-- Add more reasons as needed -->
+        </ul>
+    </div>
+
+    <!-- You can also display additional information about the video, if available -->
+    <h3>Video Details</h3>
+    <p>Description: {{ video.description }}</p>
+    <p>Upload Date: {{ video.upload_date }}</p>
+</body>
+{% endblock %}

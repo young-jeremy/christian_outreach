@@ -1,0 +1,11 @@
+
+{% block content %}
+<h2>Your Videos</h2>
+<ul>
+    {% for video in videos %}
+    <li>
+        <a href="{% url 'videos:videos_list' %}">{{ video.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

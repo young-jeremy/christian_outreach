@@ -1,0 +1,16 @@
+<!-- user_profile.html (template) -->
+<h1>User Profile</h1>
+<p>Username: {{ user.username }}</p>
+<p>Activity: {{ user.userprofile.activity }}</p>
+
+<h2>Favorite Videos</h2>
+<ul>
+    {% for video in user_favorite_videos %}
+            <li>
+                <a href="{% url 'videos:video_details' video.video.id %}">
+                    {{ video.video.title }}
+                </a>
+                - Added at {{ favorite.added_at }}
+            </li>
+    {% endfor %}
+</ul>

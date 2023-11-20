@@ -1,0 +1,11 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+    <title>Registration</title>
+
+    <h2>Register</h2>
+    <form method="post" action="{% url 'users:register_new_user' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+{% endblock %}

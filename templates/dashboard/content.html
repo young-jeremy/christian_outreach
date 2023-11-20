@@ -1,0 +1,35 @@
+{% extends 'base_channel.html' %}
+
+{% block content %}
+{% for video in videos %}
+          <div class="row ">
+            <div class="col-md-2">
+                video
+                <p>
+                    <img src="{{ video.thumbnail.url }}">
+                    <span>{{ video.title }}</span>
+                </p>
+            </div>
+              <hr>
+                visibility
+                {{ video.privacy }}
+                restrictions
+                date
+                <p>{{ video.recording_date_and_location }}</p>
+                views
+                <p>{{ video.views }}</p>
+                likes & dislikes
+                  <p>{{ video.likes }}</p>
+              <hr>
+
+
+</div>
+
+</div>
+
+
+
+{% endfor %}
+
+    <!-- You can include additional information and styling as needed -->
+{% endblock content %}

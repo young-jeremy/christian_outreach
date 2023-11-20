@@ -1,0 +1,133 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+<style>
+        /* Style for the video card container */
+        .video-card {
+            width: 300px; /* Adjust the width as needed */
+            border: 1px solid #ccc;
+            border-radius: 10px; /* Rounded corners for the video card */
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow effect */
+        }
+
+        /* Style for the video thumbnail image */
+        .video-thumbnail {
+            width: 100%;
+            height: 180px; /* Adjust the height as needed */
+            object-fit: cover;
+        }
+
+        /* Style for video title */
+        .video-title {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        /* Style for video description (optional) */
+        .video-description {
+            padding: 10px;
+            color: #888;
+        }
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.video-card {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+
+.thumbnail {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 8px 0 0 8px; /* Rounded left corner */
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info {
+    flex: 2;
+    padding: 16px;
+}
+
+.title {
+    font-size: 20px;
+    margin: 0;
+}
+
+.description {
+    font-size: 14px;
+    color: #777;
+}
+
+.video-cover {
+    border-radius: 10px; /* Same value as the parent video-card */
+    max-width: 100%;
+    height: auto;
+}
+
+    </style>
+<!-- templates/base.html or templates/home.html -->
+<link rel="stylesheet" type="text/css" href="{% static 'static/css/styles.css' %}">
+
+
+<!--Main Navigation-->
+
+{% block content %}
+
+
+    <div class="grid">
+        <div class="row">
+            {% for video in approved_videos.all %}
+              <div>
+                  <a href="{% url 'videos:video_details' video.id %}">
+                    <img class="image-thumbnail video-cover" src="{{ video.thumbnail.url }}" alt="{{ video.title }} Thumbnail" style="height:250; width:250;">
+                  </a>
+                <h3 class="video-title">{{ video.title }}</h3>
+                  <p style="padding-left:1;" class="text-muted"><span>{{ video.current_likes }} views </span></p>
+                  <p style="padding-left:5px;"><small><span class="text-muted" style="padding-left:1;"> {{ video.recording_date_and_location }}</span></small></p>
+                  <a href="{% url 'users:profile'  %}">
+                    <img  src="{{ user.avatar.url }}" alt="{{ video.owner.username }}" style="width:100; length:50; border-radius: 50px;">
+
+                  </a>
+                  <span>{{ user.username }}</span>
+
+              </div>
+            {% empty %}
+                <div class="video card">
+                    <p>{{ blocked_videos }}</p>
+                    <p>{{ rejected_videos }}</p>
+                </div>
+            {% endfor %}
+      </div>
+    </div>
+
+<script>
+  window.watsonAssistantChatOptions = {
+    integrationID: "6a8fed36-58d4-43e3-a153-0c5c2ceda6c8", // The ID of this integration.
+    region: "au-syd", // The region your integration is hosted in.
+    serviceInstanceID: "bf7ad12b-4289-46d2-baba-e83ff9aa0a59", // The ID of your service instance.
+    onLoad: function(instance) { instance.render(); }
+  };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
+  });
+</script>
+{% endblock %}

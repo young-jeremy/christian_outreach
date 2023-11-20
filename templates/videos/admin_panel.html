@@ -1,0 +1,15 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+  <h2>Moderation Dashboard</h2>
+  <ul>
+    {% for request in moderation_requests %}
+      <li>
+        {{ request.user.username }} has requested approval for {{ request.content.title }}
+        <form method="post" action="{% url 'videos:approve_content' request.video.id %}">
+          {% csrf_token %}
+          <button type="submit">Approve</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

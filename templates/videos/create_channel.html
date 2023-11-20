@@ -1,0 +1,15 @@
+<!-- community/create_channel.html -->
+
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+  <h1>Create a New Channel</h1>
+
+  <form method="post" action="{% url 'videos:create_channel' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Channel</button>
+  </form>
+
+  <a href="{% url 'users:channel_list' %}">Back to Channel List</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+<form action="{% url 'index' %}" method="post">
+    {% csrf_token %}
+    {% if is_subd %}
+        {% for sb in SubChannel %}
+            <button type="submit" value="" > subd{{ sb }} </button>
+        {% endfor %}
+    {% else %}
+         {% for sb in SubChannel %}
+              <button type="submit"  value="" >not sub {{ sb }}</button>
+         {% endfor %}
+    {% endif %}
+</form>

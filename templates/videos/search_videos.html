@@ -1,0 +1,41 @@
+{% extends 'base_dashboard.html' %}
+    <title>Video Search Results</title>
+
+{% block content %}
+    {% if videos %}
+        <h2>Search Results for "{{ query }}":</h2>
+        <ul>
+            {% for video in videos %}
+            <div class="card mb-3 related-videos" style="max-width: 540px;">
+              <div class="row g-0">
+
+                    <div class="col-md-4">
+                      <a href="{% url 'videos:video_details' video.id %}">
+                            <img
+                            src="{{ video.thumbnail.url }}" style="length:100;width:100;"
+                            alt="{{ user.username }}"
+                            style="length:100;width:100;"
+                            class="img-fluid rounded-start"
+                          />
+                      </a>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                          <a><h5 class="card-title">{{ video.title }}</h5></a>
+                        <p class="card-text">
+                          {{ user.username }}
+                        </p>
+                        <p class="card-text">
+                          <small class="text-muted">{{ video.views }} views {{ video.recording_date_and_location|timesince  }}</small>
+                        </p>
+                      </div>
+                    </div>
+
+              </div>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found for "{{ query }}".</p>
+    {% endif %}
+{% endblock content %}
+

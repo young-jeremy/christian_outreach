@@ -1,0 +1,76 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+    <a href="{% url 'videos:all_videos' %}">
+        <button type="button" class="btn btn-light"data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+      All
+    </button>
+    </a>
+    <a href="{% url 'videos:praise_and_worship' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      Praise and worship
+    </button>
+    </a>
+    <a href="{% url 'videos:praise_and_worship' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      music
+    </button>
+    </a>
+    <a href="{% url 'videos:sermons' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+      Sermons
+    </button>
+    </a>
+    <a href="{% url 'videos:gospel_made_for_kids' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="left" title="Tooltip on left">
+      Gospel for kids
+    </button>
+    </a>
+
+    <a href="{% url 'videos:praise_and_worship' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      testimonies
+    </button>
+    </a>
+    <a href="{% url 'videos:sermons' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+      bible lessons discussions
+    </button>
+    </a>
+    <a href="{% url 'videos:gospel_made_for_kids' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="left" title="Tooltip on left">
+      evangelism
+    </button>
+    </a>
+    <div class="col-12 video grid video-card">
+        <div class="row video-card" style="padding-top:10;">
+            {% for video in all_gospel_videos %}
+            <a href="{% url 'videos:video_details' video.id %}">
+                <div class="col-md-4 card h-100">
+                    <a href="{% url 'videos:video_details' video.id %}">
+                        <a href="{% url 'videos:video_details' video.id %}">
+                            <img class="video-card" src="{{ video.thumbnail.url }}" alt="{{ video.title }} Thumbnail" style="height:200; width:400;">
+                        </a>
+                        <a href="{% url 'videos:video_details' video.id %}" class="video-title">
+                            <h3 class="video-title">{{ video.title }}</h3>
+                        </a>
+
+                        <div>
+                            <a href="{% url 'users:profile'  %}">
+                                <img src="{{ user.profile.avatar.url }}" alt="{{ video.owner.username }}" style="width:50; length:50; border-radius: 50px;">
+
+                            <span>{{ user.username }}</span>
+                            </a>
+                        </div>
+
+
+                        <p>{{ video.views.count }} views<span>{{ video.recording_date_and_location|timesince }} ago</span></p>
+
+                    </a>
+                </div>
+            </a>
+                    <br><br>
+            {% endfor %}
+        </div>
+        <br><br>
+    </div>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% block content %}
+  <h2>Content Guidelines</h2>
+  <ul>
+    {% for guideline in guidelines %}
+      <li>
+        <h3>{{ guideline.title }}</h3>
+        <p>{{ guideline.content }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

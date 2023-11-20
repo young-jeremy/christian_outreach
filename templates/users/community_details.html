@@ -1,0 +1,57 @@
+{% extends 'base_dashboard.html' %}
+    <title>Community Details</title>
+{% block content %}
+  <div>
+    <h2>Community</h2>
+    <div id="result-message"></div>
+    <form method="post" action="{% url 'users:join_community' %}" id="join-community-form">
+        {% csrf_token %}
+        {{ form.community_id }}
+        <button type="submit" id="join-button">Join</button>
+    </form>
+    <img src="{{ community.church_logo.url }}" style="width:1000; length:2500;">
+    <p>name: {{ community.name }}</p>
+    <p> Description: {{ community.description }} </p>
+    <p> Members: {{ community.members }} </p>
+    <p>ID: {{ community.id }}</p>
+  </div>
+
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('join-community-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                var communityId = document.getElementById('id_community_id').value;
+                var joinButton = document.getElementById('join-button');
+                var resultMessage = document.getElementById('result-message');
+
+                // Disable the form while processing the request
+                joinButton.disabled = true;
+
+                // Make an AJAX request to join the community
+                fetch('/join_community/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrf_token,  // Include your CSRF token
+                    },
+                    body: JSON.stringify({ community_id: communityId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resultMessage.textContent = 'You have successfully joined the community.';
+                    } else {
+                        resultMessage.textContent = 'Joining the community failed. Please try again.';
+                    }
+                })
+                .catch(error => {
+                    resultMessage.textContent = 'An error occurred while processing your request.';
+                })
+                .finally(() => {
+                    // Re-enable the form
+                    joinButton.disabled = false;
+                });
+            });
+        });
+    </script>
+{% endblock %}

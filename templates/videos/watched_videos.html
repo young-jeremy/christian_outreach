@@ -1,0 +1,14 @@
+<!-- watched_videos.html -->
+
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+    <h1>Watched Videos</h1>
+    <ul>
+        {% for video in watched_videos %}
+            <li>{{ video.video.title }}</li>
+        {% empty %}
+            <li>No watched videos yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

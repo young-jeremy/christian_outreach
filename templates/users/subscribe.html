@@ -1,0 +1,15 @@
+<!-- community/subscribe.html -->
+
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+  <h1>Subscribe to {{ channel.name }}</h1>
+
+  <form method="post" action="{% url 'users:subscribe' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Subscribe</button>
+  </form>
+
+  <a href="{% url 'users:channel_details' channel.id %}">Back to Channel</a>
+{% endblock %}

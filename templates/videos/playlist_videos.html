@@ -1,0 +1,12 @@
+{% extends 'base_dashboard.html' %}
+    <title>Playlists</title>
+{% block content %}
+    {% for playlist in request.user.total_playlist_videos.all %}
+    <div>
+        {{ playlist.name }}
+        {{ playlist.videos }}
+        {{ playlist.created_at }}
+
+    </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+<!-- add_to_watch_later.html -->
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+<div>
+  <h1>Add Video to Watch Later</h1>
+  <form method="POST" action="{% url 'videos:add_to_watch_later' user.id %}">
+    {% csrf_token %}
+    <p>{{ video.title }}</p>
+    <p>{{ video.description }}</p>
+    <p>Duration: {{ video.duration }}</p>
+    <input type="submit" value="Add to Watch Later">
+  </form>
+</div>
+{% endblock %}

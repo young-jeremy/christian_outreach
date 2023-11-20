@@ -1,0 +1,14 @@
+<!-- liked_videos.html -->
+
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+    <h1>Liked Videos</h1>
+    <ul>
+        {% for video in user_liked_videos %}
+        <a href="{% url 'videos:video_details' video.id %}"><li>{{ video.video.title }}</li></a>
+        {% empty %}
+            <li>No liked videos yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

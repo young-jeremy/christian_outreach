@@ -1,0 +1,36 @@
+<!-- notifications.html -->
+
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+  <h1>Notifications</h1>
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li
+                    {% if message.tags %}
+                    class="{{ message.tags }}"
+                    {% endif %}>
+              {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+  <ul>
+    {% for notification in notifications %}
+      <li {% if not notification.is_read %}class="unread"{% endif %}>
+        {{ notification.content }}
+        <small>{{ notification.timestamp }}</small>
+      </li>
+    {% empty %}
+      <p>No notifications</p>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'users:mark_all_as_read' %}">Mark All as Read</a>
+
+  <a href="{% url 'videos:channel_list' %}">Back to Channel List</a>
+{% endblock %}

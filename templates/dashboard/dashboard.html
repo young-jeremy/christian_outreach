@@ -1,0 +1,41 @@
+{% extends 'base_channel.html' %}
+    <title>dashboard</title>
+{% block content %}
+    <h1>Channel Dashboard</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4 col-md-12">
+        <h6>Latest Subscribers</h6>
+        <div>
+            <ul>
+                {% for channel in channels_subscribed %}
+                  <li><a href="{% url 'videos:channel_details' channel.id %}">{{ channel.name }}</a>Channels subscribed</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+        <h6>Latest Video Performances</h6>
+    <div class="col-lg-4 col-md-6">
+        <h6>Channel Analysis</h6>
+        <h8>current subscribers</h8>
+        {% for video in videos %}
+        <div class="card card-body">
+            <h1>Video Traffic for {{ video.title }}</h1>
+            <p>Views: {{ video.views }}</p>
+            <p>Likes: {{ video.likes.count }}</p>
+            <p>Shares: {{ video.shares }}</p>
+            <p>Comments: {{ video.comments.count }}
+                {{ comments.count }} {% if comments.count == 1 %}Comment{% else %}Comments{% endif %}
+            </p>
+        </div>
+{% endfor %}
+    </div>
+        <h6>Published Videos</h6>
+    <div class="col-lg-4 col-md-6">
+        <h6>Latest Comments</h6>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

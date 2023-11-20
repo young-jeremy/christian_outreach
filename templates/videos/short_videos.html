@@ -1,0 +1,28 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<!-- upload_short_video.html -->
+<!-- short_video_list.html -->
+<h1>Short Video List</h1>
+    {% for video in short_videos.all %}
+        <div class="card">
+                <div class="card body">
+                    <a href="{% url 'videos:short_video_details' video.id %}">
+
+                        <video controls width="320" height="440">
+                            <source src="{{ MEDIA_URL }} {{ video.video_file.url }}" type="video/mp4">
+                        </video>
+                    </a>
+                    <h2>{{ video.title }}</h2>
+                    <h2><a href="{% url 'users:account_settings' %}">
+                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s Channel Cover" class="img-fluid" style="length:700; width:100;">
+
+                        {{ video.uploader.username }}</a></h2>
+                    <p>Description </p>
+                        <p>{{ video.description }}</p>
+                    <p>{{ video.views }} <span>Views</span></p>
+                    <p>{{ video.description }}</p>
+
+                </div>
+        </div>
+    {% endfor %}
+{% endblock %}

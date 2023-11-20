@@ -1,0 +1,57 @@
+{% extends 'base_dashboard.html' %}
+<!-- recording.html -->
+{% block content %}
+<video id="video" autoplay></video>
+<button id="startRecord">
+<lord-icon
+    src="https://cdn.lordicon.com/ppwsfvnn.json"
+    trigger="in"
+    delay="1500"
+    state="in-reveal"
+    colors="primary:#121331,secondary:#e8308c"
+    style="width:250px;height:250px">
+</lord-icon>
+    Start Recording</button>
+<button id="stopRecord">Stop Recording</button>
+<button id="saveRecord">Save Video</button>
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+  const video = document.getElementById('video');
+  const startRecord = document.getElementById('startRecord');
+  const stopRecord = document.getElementById('stopRecord');
+  const saveRecord = document.getElementById('saveRecord');
+  const canvas = document.getElementById('canvas');
+
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  video.srcObject = stream;
+
+  const mediaRecorder = new MediaRecorder(stream);
+  let recordedChunks = [];
+
+  mediaRecorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      recordedChunks.push(event.data);
+    }
+  };
+
+  startRecord.addEventListener('click', () => {
+    recordedChunks = [];
+    mediaRecorder.start();
+  });
+
+  stopRecord.addEventListener('click', () => {
+    mediaRecorder.stop();
+  });
+
+  saveRecord.addEventListener('click', () => {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recorded-video.webm';
+    a.click();
+  });
+</script>
+    <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+{% endblock %}

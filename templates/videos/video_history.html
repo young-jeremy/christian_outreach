@@ -1,0 +1,15 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+    <h1>My Video History</h1>
+    <ul>
+        {% for history_entry in video_history %}
+            <li>
+                {{ history_entry.video.title }} (Watched on {{ history_entry.watched_at }})
+            </li>
+        {% empty %}
+            <li>No video history yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

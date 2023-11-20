@@ -1,0 +1,116 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% block title %} | Account Login {% endblock %}
+
+<style>
+        /* Style for the video card container */
+        .video-card {
+            width: 300px; /* Adjust the width as needed */
+            border: 1px solid #ccc;
+            border-radius: 10px; /* Rounded corners for the video card */
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow effect */
+        }
+
+        /* Style for the video thumbnail image */
+        .video-thumbnail {
+            width: 100%;
+            height: 180px; /* Adjust the height as needed */
+            object-fit: cover;
+        }
+
+        /* Style for video title */
+        .video-title {
+            padding: 100px;
+            font-weight: bold;
+        }
+
+        /* Style for video description (optional) */
+        .video-description {
+            padding: 1px;
+            color: #888;
+        }
+    </style>
+
+{% block content %}
+{#<h1>Video Uploader</h1>#}
+{#<form enctype="multipart/form-data" method="POST" action="">#}
+{#{% csrf_token %}#}
+{#{{ form.as_p }}#}
+{#<input type="submit" value="Upload"/>#}
+{#</form>#}
+    <a href="{% url 'videos:all_videos' %}">
+        <button type="button" class="btn btn-light"data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+      All
+    </button>
+    </a>
+    <a href="{% url 'videos:praise_and_worship' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      Praise and worship
+    </button>
+    </a>
+    <a href="{% url 'videos:praise_and_worship' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      music
+    </button>
+    </a>
+    <a href="{% url 'videos:sermons' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+      Sermons
+    </button>
+    </a>
+    <a href="{% url 'videos:gospel_made_for_kids' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="left" title="Tooltip on left">
+      Gospel for kids
+    </button>
+    </a>
+
+    <a href="{% url 'videos:testimonies' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+      testimonies
+    </button>
+    </a>
+    <a href="{% url 'videos:bible_discussions' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+      bible lessons discussions
+    </button>
+    </a>
+    <a href="{% url 'videos:evangelism' %}">
+        <button type="button" class="btn btn-light" data-toggle="tooltip" data-placement="left" title="Tooltip on left">
+      evangelism
+    </button>
+    </a>
+    <div class="col-12 video grid video-card">
+        <div class="row video-card" style="padding-top:10;">
+            {% for video in praise_and_worship_videos %}
+            <a href="{% url 'videos:video_details' video.id %}">
+                <div class="col-md-4 card h-100">
+                    <a href="{% url 'videos:video_details' video.id %}">
+                        <a href="{% url 'videos:video_details' video.id %}">
+                            <img class="video-card" src="{{ video.thumbnail.url }}" alt="{{ video.title }} Thumbnail" style="height:200; width:400;">
+                        </a>
+                        <a href="{% url 'videos:video_details' video.id %}" class="video-title">
+                            <h3 class="video-title">{{ video.title }}</h3>
+                        </a>
+
+                        <div>
+                            <a href="{% url 'users:profile'  %}">
+                                <img src="{{ user.profile.avatar.url }}" alt="{{ video.owner.username }}" style="width:50; length:50; border-radius: 50px;">
+
+                            <span>{{ user.username }}</span>
+                            </a>
+                        </div>
+
+
+                        <p>{{ video.views.count }} views<span>{{ video.recording_date_and_location|timesince }} ago</span></p>
+
+                    </a>
+                </div>
+            </a>
+                    <br><br>
+            {% endfor %}
+        </div>
+        <br><br>
+    </div>
+{% endblock %}
+

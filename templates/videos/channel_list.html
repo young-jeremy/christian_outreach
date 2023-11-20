@@ -1,0 +1,17 @@
+{% extends 'base_dashboard.html' %}
+    <title>Channels</title>
+{% block content %}
+<h2>Channel list</h2>
+    {% for channel in channels %}
+
+    <div class="card">
+        {{ channel.name }}
+        <form action="{% url 'users:subscribe' channel.id %}" method="post">
+            <input type="button" id="subscribe" value="subscribe">
+
+        </form>
+    </div>
+
+    {% endfor %}
+{% endblock %}
+

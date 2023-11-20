@@ -1,0 +1,14 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+<div class="container">
+    <video controls width="640" height="360">
+        <source src="{{ MEDIA_URL }}{{ video.video_file }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>   <!-- Add other video details as needed -->
+    <h2>{{ video.title }}</h2>
+    <p>Description: {{ video.description }}</p>
+    <p>Upload Date: {{ video.upload_date }}</p>
+    <p> {{ video.views }} views</p>
+</div>
+{% endblock %}

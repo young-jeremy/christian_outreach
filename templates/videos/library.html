@@ -1,0 +1,9 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+    <h2>Videos Uploaded</h2>
+  <ul>
+    {% for video in videos_uploaded %}
+      <li><a href="{% url 'videos:video_details' video.id %}">{{ video.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

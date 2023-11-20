@@ -1,0 +1,16 @@
+{% extends 'base_dashboard.html' %}
+    <title>Community List </title>
+
+  {% block content %}
+
+      {% for community in view_communities %}
+    <a href="{% url 'users:community_details' community.id %}">
+        <div>
+            <img src="{{ community.church_logo.url }}" alt="{{ community.name }}'s profile photo" style="length:100;width:250;">
+            <p>{{ community.name }}</p>
+            <p>{{ community.description }}</p>
+        </div>
+    </a>
+      {% endfor %}
+  {% endblock %}
+

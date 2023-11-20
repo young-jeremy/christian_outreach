@@ -1,0 +1,10 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+        <div>
+            <form action="{% url 'videos:edit_comment' comment.id %}" method="post" class="edit-form">
+                {% csrf_token %}
+                <input type="text" name="text" value="{{ comment.user.text }}">
+                <button class="edit-comment" data-comment-id="{{ comment.id }}" onclick="return confirm('Are you sure you want to edit this comment?')">Edit</button>
+            </form>
+        </div>
+{% endblock content %}

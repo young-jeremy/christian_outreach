@@ -1,0 +1,57 @@
+
+
+
+  <div class="container">
+    <h2>Video Details</h2>
+    <div class="video">
+      <h3>Good days</h3>
+      <p>this was recorded by a US artist</p>
+      <div class="owner-info">
+        <img src="" alt=" Profile Picture">
+        <p>Owner: </p>
+      </div>
+      <video controls>
+        <source src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-controls">
+        <button onclick="changePlaybackSpeed(1.5)">1.5x Speed</button>
+        <a href="" download>Download</a>
+        <button onclick="likeVideo(1)">Like</button>
+        <button onclick="shareVideo(1)">Share</button>
+      </div>
+      <div class="comments">
+        <!-- Display comments for the video -->
+        <h4>Comments</h4>
+        
+        
+          <form method="post" action="/videos/1/comment_video/">
+            <input type="hidden" name="csrfmiddlewaretoken" value="0w0ld4Y51SC8k7y5dNL6cPC6lzJJXCRMDrnpqlReNnFvW8k2i6UBtEy6gbx52LvW">
+            <textarea name="text" placeholder="Add a comment" required></textarea>
+            <button type="submit">Post Comment</button>
+          </form>
+        
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function changePlaybackSpeed(speed) {
+      var video = document.querySelector('video');
+      video.playbackRate = speed;
+    }
+
+    function likeVideo(videoId) {
+      // Implement liking functionality (e.g., AJAX request to your server)
+      // You may need to use JavaScript libraries like jQuery or fetch API.
+    }
+
+    function shareVideo(videoId) {
+      // Implement sharing functionality (e.g., sharing dialog or link generation)
+    }
+
+    function deleteComment(commentId) {
+      // Implement comment deletion functionality (e.g., AJAX request to your server)
+      // You may need to confirm the deletion with the user.
+    }
+  </script>

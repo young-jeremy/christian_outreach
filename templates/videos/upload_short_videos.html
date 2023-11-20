@@ -1,0 +1,59 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Recording</title>
+</head>
+<body>
+    <form id="video-upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" accept="video/*" id="video-input" name="video" required>
+        <button id="start-recording-button">Start Recording</button>
+        <button id="stop-recording-button">Stop Recording</button>
+        <button type="submit">Upload Video</button>
+    </form>
+    
+    <video id="recorded-video" controls></video>
+
+    <script>
+        // Define variables and initialize MediaRecorder
+        const videoInput = document.getElementById('video-input');
+        const startRecordingButton = document.getElementById('start-recording-button');
+        const stopRecordingButton = document.getElementById('stop-recording-button');
+        const recordedVideo = document.getElementById('recorded-video');
+        const videoChunks = [];
+        let mediaRecorder;
+        
+        videoInput.addEventListener('change', () => {
+            const stream = videoInput.files[0];
+            mediaRecorder = new MediaRecorder(stream);
+
+            // Limit recording to 1 minute
+            mediaRecorder.ondataavailable = (e) => {
+                videoChunks.push(e.data);
+            };
+
+            // When recording is stopped
+            mediaRecorder.onstop = () => {
+                const videoBlob = new Blob(videoChunks, { type: 'video/mp4' });
+                recordedVideo.src = URL.createObjectURL(videoBlob);
+            };
+        });
+
+        startRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'inactive') {
+                videoChunks.length = 0;
+                mediaRecorder.start();
+            }
+        });
+
+        stopRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}

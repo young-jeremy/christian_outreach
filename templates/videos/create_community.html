@@ -1,0 +1,15 @@
+<!-- community/create_community.html -->
+
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+  <h1>Create a New Community</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Community</button>
+  </form>
+
+  <a href="{% url 'users:community_list' %}">Back to Community List</a>
+{% endblock %}

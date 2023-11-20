@@ -1,0 +1,41 @@
+{% extends 'base_channel.html' %}
+{% load static %}
+    <meta charset="UTF-8">
+    <title>All Comments</title>
+{% block content %}
+    <div>
+        <h2>{{ comments.count }} {% if comments.count == 1 %}Comment{% else %}Comments{% endif %}</h2>
+            {% for comment in comments.all %}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col">
+                        <a href="{% url 'users:account_settings' %}">
+                          <img
+                            src="{{ user.profile.avatar.url }}" class="img-fluid rounded-start img-fluid" style="length:50; width:50;"
+                            alt="{{ user.username }}"
+                          />
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                      <div class="card-body">
+                        <p>{{ user.username }}
+                            <span>
+                                <small class="text-muted">{{ comment.created_at|timesince }}</small>
+                            </span>
+                        </p>
+
+                        <p class="card-text">
+                          {{ comment.text }}
+                        </p>
+                          <p class="card-text">
+                            REPLY
+                          </p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+    </div>
+
+{% endblock %}

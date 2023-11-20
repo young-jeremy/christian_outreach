@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% for video in all_videos %}
+        <div class="videos__container card">
+          <!-- Single Video starts -->
+          <div class="video card">
+            <div class="video__thumbnail">
+              <a href="{% url 'videos:video' video.id %}">
+                <img src="{{ video.thumbnail.url }}" alt="" />
+              </a>
+            </div>
+            <div class="video__details">
+              <div class="author">
+                <img src="{% url 'users:profile' %}" alt="" />
+              </div>
+              <div class="title">
+                <h3>
+                  {{ video.title }}
+                </h3>
+                <a href=""></a>
+                <span>{{ video.post_views }} views </span>
+                <span>{{ video.recording_date_and_location|timesince }} ago</span>
+
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+{% endblock %}

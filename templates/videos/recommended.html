@@ -1,0 +1,16 @@
+<!-- myapp/templates/recommendation_template.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Recommendations</title>
+</head>
+<body>
+    <h1>Recommended Videos</h1>
+    <ul>
+        {% for video in recommended_videos %}
+            <li>{{ video.title }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

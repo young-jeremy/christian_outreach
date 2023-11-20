@@ -1,0 +1,13 @@
+{% extends 'base_channel.html' %}
+    <title>Send Copyright Notice</title>
+
+{% block content %}
+    <h1>Send a Notice to {{ user.username }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Send Notice">
+    </form>
+
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends 'base_dashboard.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Traffic</title>
+</head>
+<body>
+{% block content %}
+{% for video in videos %}
+    <h1>Video Traffic for {{ video.title }}</h1>
+    <p>Views: {{ views }}</p>
+    <p>Likes: {{ likes }}</p>
+    <p>Shares: {{ shares }}</p>
+    <p>Comments: {{ comments }}</p>
+{% endfor %}
+
+    <!-- You can include additional information and styling as needed -->
+{% endblock content %}
+</body>
+
+</html>

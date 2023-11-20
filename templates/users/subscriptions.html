@@ -1,0 +1,11 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+
+  <h2>Channels Subscribed</h2>
+  <ul>
+    {% for channel in channels_subscribed %}
+      <li><a href="{% url 'videos:channel_details' channel.id %}">{{ channel.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

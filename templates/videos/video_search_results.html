@@ -1,0 +1,26 @@
+{% extends 'base_dashboard.html' %}
+
+<!-- search_results.html -->
+
+{% if query %}
+    <h2>Search Results for "{{ query }}"</h2>
+    <h3>Videos</h3>
+    <ul>
+        {% for video in video_results %}
+            <li><a href="{% url 'videos:video_details' video.pk %}">{{ video.title }}</a></li>
+        {% empty %}
+            <li>No videos found.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Users</h3>
+    <ul>
+        {% for user in user_results %}
+            <li><a href="{% url 'users:user_profile' user.pk %}">{{ user.username }}</a></li>
+        {% empty %}
+            <li>No users found.</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Please enter a search query.</p>
+{% endif %}

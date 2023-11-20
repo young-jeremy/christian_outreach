@@ -1,0 +1,141 @@
+{% extends 'base_channel.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-3">
+    <!-- Tab navs -->
+    <div
+      class="nav flex-column nav-pills text-center"
+      id="v-pills-tab"
+      role="tablist"
+      aria-orientation="vertical"
+    >
+      <a
+        class="nav-link active"
+        id="v-pills-home-tab"
+        data-mdb-toggle="pill"
+        href="#v-pills-home"
+        role="tab"
+        aria-controls="v-pills-account"
+        aria-selected="true"
+        >Channel</a
+      >
+      <a
+        class="nav-link"
+        id="requests"
+        data-mdb-toggle="pill"
+        href="{% url 'videos:moderation_requests' %}"
+        role="tab"
+        aria-controls="requests"
+        aria-selected="false"
+        >General</a
+      >
+      <a
+        class="nav-link"
+        id="v-pills-shares-tab"
+        data-mdb-toggle="pill"
+        href="{% url 'videos:approved_videos' %}"
+        role="tab"
+        aria-controls="v-pills-shares"
+        aria-selected="false"
+        >Upload Defaults</a
+      >
+      <a
+        class="nav-link "
+        id="pending-tab"
+        data-mdb-toggle="pill"
+        href="{% url 'videos:pending_videos' %}"
+        role="tab"
+        aria-controls="v-pills-pending-videos"
+        aria-selected="false"
+        >Pending Videos</a
+      >
+      <a
+        class="nav-link"
+        id="v-pills-performance-tab"
+        data-mdb-toggle="pill"
+        href=""
+        role="tab"
+        aria-controls="v-pills-performance"
+        aria-selected="false"
+        >Permissions</a
+      >
+
+      <a
+        class="nav-link"
+        id="v-pills-community-tab"
+        data-mdb-toggle="pill"
+        href="#v-pills-communities"
+        role="tab"
+        aria-controls="v-pills-communities"
+        aria-selected="false"
+        >Community</a
+      >
+      <a
+        class="nav-link "
+        id="v-pills-apps-tab"
+        data-mdb-toggle="pill"
+        href="#v-pills-home"
+        role="tab"
+        aria-controls="v-pills-apps"
+        aria-selected="false"
+        >Agreements</a
+      >
+      <a
+        class="nav-link"
+        id="v-pills-downloads-tab"
+        data-mdb-toggle="pill"
+        href="#v-pills-downloads"
+        role="tab"
+        aria-controls="v-pills-downloads"
+        aria-selected="false"
+        >Download</a
+      >
+      <a
+        class="nav-link"
+        id="v-pills-settings-tab"
+        data-mdb-toggle="pill"
+        href="#v-pills-settings"
+        role="tab"
+        aria-controls="v-pills-settings"
+        aria-selected="false"
+        >Complex Settings</a
+      >
+    </div>
+    <!-- Tab navs -->
+  </div>
+
+  <div class="col-9">
+    <!-- Tab content -->
+    <div class="tab-content" id="v-pills-tabContent">
+      <div
+        class="tab-pane fade show active"
+        id="v-pills-home"
+        role="tabpanel"
+        aria-labelledby="v-pills-home-tab"
+      >
+        <h3>Account</h3>
+        <h5>You can make a selection of what you want to see on the channel</h5>
+        <hr>
+        <a href="{% url 'videos:create_channel' %}">create a brand new channel</a>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="moderation-requests"
+        role="tabpanel"
+        aria-labelledby="requests"
+      >
+        Moderation Requests
+      </div>
+      <div
+        class="tab-pane fade"
+        id="v-pills-messages"
+        role="tabpanel"
+        aria-labelledby="v-pills-messages-tab"
+      >
+        Messages content
+      </div>
+    </div>
+    <!-- Tab content -->
+  </div>
+</div>
+{% endblock content %}

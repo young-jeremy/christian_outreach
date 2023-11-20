@@ -1,0 +1,17 @@
+{% extends 'base_dashboard.html' %}
+<!-- generate_captions.html -->
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="video">
+    <input type="submit" value="Generate Captions">
+</form>
+
+<!-- captions.html -->
+<h2>Video Captions:</h2>
+<ul>
+    {% for caption in captions %}
+        <li>{{ caption }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

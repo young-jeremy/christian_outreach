@@ -1,0 +1,18 @@
+{% extends 'base_dashboard.html' %}
+    <meta charset="UTF-8">
+    <title>Approved Videos</title>
+{% block content %}
+  <div>
+    <ul>
+      {% for video in approved_content %}
+        <div class="card card-body">
+            <li>
+              <a href="{% url 'videos:video_details' video.id %}">
+                  <img src="{{ video.thumbnail.url }}" style="width:100;length:100;"> <span> {{ video.views }} views |{{ video.recording_date_and_location|timesince }} |{{ video.description }}</span></p>
+              </a>
+            </li>
+        </div>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base_dashboard.html' %}
+    <title>Pending Videos</title>
+{% block content %}
+    <ul>
+            {% for video in total_pending_videos %}
+                    <li>
+                                {{ video.title }}
+                                {{ video.description }}
+                                {{ video.status }}
+                    </li>
+            {% empty %}
+                <p>
+                    There are no pending videos currently
+                </p>
+            {% endfor %}
+
+    </ul>
+{% endblock %}

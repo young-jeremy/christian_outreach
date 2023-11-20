@@ -1,0 +1,198 @@
+<!-- account/account_settings.html -->
+
+{% extends 'base_dashboard.html' %}
+<style>
+        /* Style the tab content (hidden by default) */
+        .tab-content {
+            display: none;
+        }
+
+        /* Style the active tab content */
+        .active {
+            display: block;
+        }
+</style>
+
+{% block content %}
+
+<div class="container">
+
+    <section class="border p-4 text-center mb-4">
+              <header>
+                <!-- Navbar -->
+
+
+                <!-- Background image -->
+                <div
+                  class="p-5 text-center bg-image"
+                  style="
+                    background-image: url('https://mdbootstrap.com/img/new/slides/041.jpg');
+                    height: 50px;
+                  "
+                >
+                  <div
+                    class="mask"
+                    style="background-color: rgba(0, 0, 0, 0.6)"
+                  >
+                    <div
+                      class="d-flex justify-content-center align-items-center h-100"
+                    >
+                      <div class="text-white">
+                        <h1 class="mb-3">Heading</h1>
+                        <h4 class="mb-3">Subheading</h4>
+                        <a
+                          class="btn btn-outline-light btn-lg"
+                          href="#!"
+                          role="button"
+                          >Call to action</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Background image -->
+              </header>
+            </section>
+          </section>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Cover Photo -->
+            <img src="{{ user_profile.avatar.url }}" alt="{{ user.username }}'s Channel Cover" class="img-fluid" style="length:700; width:100;">
+
+            <!-- Display Cover Photo Dimensions -->
+        </div>
+    </div>
+
+    <!-- Other Profile Information -->
+
+
+
+</div>
+<img src="{{ user_profile.avatar.url }}" alt="{{ user.username }}'s Channel Cover" class="img-fluid" style="length:700; width:100;"><span>{{ user.username }}</span>
+    {% for channel in channels %}
+
+    <div class="card">
+        {{ channel.name }}
+        <form action="{% url 'users:subscribe' channel.id %}" method="post">
+            <input type="button" id="subscribe" value="subscribe">
+
+        </form>
+    </div>
+
+    {% endfor %}
+
+<!-- Tabs navs -->
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'tab1')">Home</button>
+    <button class="tablinks" onclick="openTab(event, 'tab2')">Videos</button>
+    <button class="tablinks" onclick="openTab(event, 'tab3')">Playlists</button>
+    <button class="tablinks" onclick="openTab(event, 'tab4')">Community</button>
+    <button class="tablinks" onclick="openTab(event, 'tab5')">Shorts</button>
+    <button class="tablinks" onclick="openTab(event, 'tab6')">Live</button>
+    <button class="tablinks" onclick="openTab(event, 'tab7')">Channels</button>
+    <button class="tablinks" onclick="openTab(event, 'tab8')">About</button>
+</div>
+
+<!-- Tab content -->
+<div id="tab1" class="tab-content">
+    <h2>Videos Uploaded</h2>
+    <ul>
+    {% for video in videos_uploaded %}
+      <li><a href="{% url 'videos:video_details' video.id %}">{{ video.title }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div id="tab2" class="tab-content">
+    <h2>Videos Uploaded</h2>
+    <ul>
+    {% for video in videos_uploaded %}
+      <li><a href="{% url 'videos:video_details' video.id %}">{{ video.title }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div id="tab3" class="tab-content">
+    <h3>Playlists</h3>
+    <ul>
+    {% for playlist in total_playlist_videos %}
+      <li><a href="{% url 'videos:playlist_details' video.id %}">{{ playlist.name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+<div id="tab4" class="tab-content">
+    <h3>Community</h3>
+        <ul>
+    {% for community in view_communities %}
+      <li><a href="{% url 'users:view_communities' community.id %}">{{ community.name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div id="tab5" class="tab-content">
+    <h3>Shorts</h3>
+    <ul>
+    {% for video in videos_uploaded %}
+      <li><a href="{% url 'videos:video_details' video.id %}">{{ video.title }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+
+<div id="tab6" class="tab-content">
+    <h3>Live</h3>
+    <p>This is the content for Live videos.</p>
+</div>
+<div id="tab7" class="tab-content">
+<h2>Channels Subscribed</h2>
+  <ul>
+    {% for channel in channels_subscribed %}
+      <li><a href="{% url 'videos:channel_details' channel.id %}">{{ channel.name }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+<div id="tab8" class="tab-content">
+        <div class="head-description">
+            <h2>About {{ user.username }}</h2>
+        </div>
+    <p>Email: {{ user.email }}</p>
+    <p>Bio: {{ user_profile.bio }}</p>
+    <p>Phone Number: {{ user_profile.phone_number }}</p>
+    <p>Date joined: {{ user_profile.date_joined }}</p>
+    <p>Date of birth: {{ user.date_of_birth }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+    <p>Church Affiliations: {{ user_profile.church_affiliation_or_denomination }}</p>
+
+    {% for community in view_communities %}
+        <div>
+            <img src=" {{ MEDIA_URL }} {{ community.church_logo.url }}" style="length:100;width:250;">
+            <p>{{ community.name }}</p>
+            <p>{{ community.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+
+        // Hide all tab content
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Deactivate all tab buttons
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the selected tab content and activate the corresponding button
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+{% endblock %}

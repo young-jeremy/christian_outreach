@@ -1,0 +1,13 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+    <title>Join Community</title>
+
+
+    <h2>Join a Community</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.community_id }}
+        <button type="submit">Join</button>
+    </form>
+{% endblock %}
+

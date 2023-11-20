@@ -1,0 +1,21 @@
+<!-- video_detail.html (template) -->
+<h1>{{ video.title }}</h1>
+<p>{{ video.description }}</p>
+
+<!-- Like button -->
+<form method="post" action="{% url 'like_video' video.id %}">
+    {% csrf_token %}
+    <button type="submit">Like</button>
+</form>
+
+<!-- Comment form -->
+<form method="post" action="{% url 'comment_video' video.id %}">
+    {% csrf_token %}
+    <textarea name="comment_text" rows="4" cols="50" placeholder="Leave a comment"></textarea><br>
+    <button type="submit">Comment</button>
+</form>
+
+<!-- Display existing comments -->
+{% for comment in video.comment_set.all %}
+    <p>{{ comment.user.username }}: {{ comment.text }}</p>
+{% endfor %}

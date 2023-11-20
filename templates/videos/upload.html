@@ -1,0 +1,26 @@
+<!-- upload_video.html -->
+{% block content %}
+  <h1>Upload a Video</h1>
+  <p>Choose a video to upload:</p>
+
+  <form method="post" enctype="multipart/form-data" action="{% url 'videos:video_upload' %}">
+    {% csrf_token %}
+
+    <!-- Display form errors, if any -->
+    {% if form.errors %}
+      <ul class="errorlist">
+        {% for field, errors in form.errors.items %}
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Upload</button>
+  </form>
+
+  <a href="{% url 'home:home' %}">Back to Home</a>
+{% endblock %}

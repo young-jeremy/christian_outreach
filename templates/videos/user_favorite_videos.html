@@ -1,0 +1,21 @@
+{% extends 'base_dashboard.html' %}
+<!-- user_profile.html (template) -->
+{% block content %}
+    <h1>User Profile</h1>
+    <p>Username: {{ user.username }}</p>
+    <p>Activity: {{ user.profile.activity }}</p>
+
+    <h2>Favorite Videos</h2>
+    <ul>
+          <h2>Your Favorite Videos</h2>
+          {% if favorite_videos %}
+            <ul>
+              {% for video in favorite_videos %}
+                <li>{{ video.title }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>No favorite videos yet.</p>
+          {% endif %}
+        {% endblock %}
+
